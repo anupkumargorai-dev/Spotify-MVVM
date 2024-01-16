@@ -1,13 +1,20 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id ("kotlin-kapt")
-    id ("dagger.hilt.android.plugin")
+    kotlin("kapt")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.example.spotifyeminenceinnovationtask"
     compileSdk = 34
+
+    buildFeatures {
+        buildConfig = true
+        dataBinding = true
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.example.spotifyeminenceinnovationtask"
@@ -15,6 +22,13 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        //BASE_URL
+        buildConfigField("String","BASE_URL","\"https://api.apilayer.com/spotify/\"")
+
+        //API KEY
+        buildConfigField("String","API_KEY","\"LO4EflIJk23t44jnl5OqhD9L65szi8ZL\"")
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,11 +43,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -42,6 +56,7 @@ dependencies {
     val lifecycle_version = "2.7.0"
     val RETROFIT_VERSION = "2.9.0"
     val OK_HTTP_VERSION = "4.9.0"
+    val room_version = "2.6.1"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -50,6 +65,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation ("androidx.fragment:fragment-ktx:1.5.6")
+
 
     //viewModel
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
@@ -78,7 +95,20 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
 
     //Dagger - Hilt
-    implementation ("com.google.dagger:hilt-android:2.43.2")
-    annotationProcessor ("com.google.dagger:hilt-android-compiler:2.43.2")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
+    //Room Database
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
+
+
+
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
